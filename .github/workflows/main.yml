@@ -4,23 +4,43 @@ on:
   workflow_dispatch:
     branches: [ master ]
 
-jobs:
-  makepkg:
-    runs-on: ubuntu-latest
-    container:
-      image: archlinux
-      options: --privileged
-      volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build Arch Linux package
-        uses: Tk-Glitch/build-arch-package@master
-        with:
-          PKGBUILD: $GITHUB_WORKSPACE/linux58-tkg/PKGBUILD
-          OUTDIR: $HOME/arch-packages
+#jobs:
+#  makepkg:
+#    runs-on: ubuntu-latest
+#    container:
+#      image: archlinux
+#      options: --privileged
+#      volumes:
+#        - /sys/fs/cgroup:/sys/fs/cgroup
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Build Arch Linux package
+#        uses: Tk-Glitch/build-arch-package@master
+#        with:
+#          PKGBUILD: $GITHUB_WORKSPACE/linux58-tkg/PKGBUILD
+#          OUTDIR: $HOME/arch-packages
+#
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          path: /github/home/arch-packages/
 
-      - uses: actions/upload-artifact@v2
-        with:
-          path: /github/home/arch-packages/
+jobs:
+  pkgbuild:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Makepkg Build and Check
+      id: makepkg
+      uses: Tk-Glitch/build-arch-package@master
+    - name: Print Package Files
+      run: |
+        echo "Successfully created the following package archive"
+        echo "Package: ${{ steps.makepkg.outputs.pkgfile0 }}"
+    # Uncomment to upload the package as an artifact
+    - name: Upload Package Archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ steps.makepkg.outputs.pkgfile0 }}
+        path: ${{ steps.makepkg.outputs.pkgfile0 }}  
  
