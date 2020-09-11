@@ -27,6 +27,11 @@ on:
 jobs:
   pkgbuild:
     runs-on: ubuntu-latest
+    container:
+      image: archlinux
+      options: --privileged
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup
     steps:
     - name: Checkout
       uses: actions/checkout@v2
