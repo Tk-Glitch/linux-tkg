@@ -1,0 +1,26 @@
+name: Frog-Worker-linux58
+
+on:
+  workflow_dispatch:
+    branches: [ master ]
+
+jobs:
+  makepkg:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux
+      options: --privileged
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Arch Linux package
+        uses: Tk-Glitch/build-arch-package@master
+        with:
+          PKGBUILD: $GITHUB_WORKSPACE/linux58-tkg/PKGBUILD
+          OUTDIR: $HOME/arch-packages
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: /github/home/arch-packages/
+ 
