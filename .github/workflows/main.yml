@@ -38,6 +38,9 @@ jobs:
     - name: Makepkg Build and Check
       id: makepkg
       uses: Tk-Glitch/build-arch-package@master
+      with:
+        PKGBUILD: linux58-tkg
+        #OUTDIR: $HOME/arch-packages
     - name: Print Package Files
       run: |
         echo "Successfully created the following package archive"
